@@ -1,9 +1,9 @@
-'From Cuis 5.0 [latest update: #4526] on 6 April 2021 at 10:42:53 am'!
+'From Cuis 5.0 [latest update: #4526] on 6 April 2021 at 1:15:49 pm'!
 'Description Provides different stream based readers for simple tabular data for TSV, CSV or other formats which look similiar to those formats.
 
 Author: Josef Philip Bernhart (jpb)
 License: MIT'!
-!provides: 'TableStreamers' 1 3!
+!provides: 'TableStreamers' 1 4!
 SystemOrganization addCategory: 'TableStreamers-Tests'!
 SystemOrganization addCategory: 'TableStreamers'!
 
@@ -50,12 +50,22 @@ TableArrayRecordBuilder class
 
 !classDefinition: #TableDictionaryRecordBuilder category: 'TableStreamers'!
 Object subclass: #TableDictionaryRecordBuilder
-	instanceVariableNames: ''
+	instanceVariableNames: 'fieldConverter'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
 !classDefinition: 'TableDictionaryRecordBuilder class' category: 'TableStreamers'!
 TableDictionaryRecordBuilder class
+	instanceVariableNames: ''!
+
+!classDefinition: #TableFieldConverter category: 'TableStreamers'!
+Object subclass: #TableFieldConverter
+	instanceVariableNames: 'detectNumbers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TableStreamers'!
+!classDefinition: 'TableFieldConverter class' category: 'TableStreamers'!
+TableFieldConverter class
 	instanceVariableNames: ''!
 
 !classDefinition: #TableFieldsProcessor category: 'TableStreamers'!
@@ -445,10 +455,54 @@ value: fieldsProcessor
 	
 	^fieldsProcessor storeFieldsIn: newArray! !
 
-!TableDictionaryRecordBuilder methodsFor: 'as yet unclassified' stamp: 'jpb 10/19/2020 21:30:44'!
+!TableDictionaryRecordBuilder methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:52:25'!
+convertField: newField
+	^newField asString! !
+
+!TableDictionaryRecordBuilder methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 13:03:28'!
+detectNumbers
+	fieldConverter detectNumbers ! !
+
+!TableDictionaryRecordBuilder methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:55:02'!
+initialize
+	fieldConverter _ TableFieldConverter new! !
+
+!TableDictionaryRecordBuilder methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:54:47'!
 value: fieldsProcessor
 	"Builds a new record using the given fields processor"
-	^fieldsProcessor storeWithFieldNamesIn: Dictionary new! !
+	^fieldsProcessor
+		storeWithFieldNamesIn: Dictionary new
+		using: fieldConverter ! !
+
+!TableFieldConverter methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:56:09'!
+detectNumbers
+	"Returns numbers, if they are found in the input"
+	
+	detectNumbers _ true! !
+
+!TableFieldConverter methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:56:27'!
+ignoreNumbers
+	"Returns numbers, if they are found in the input"
+	
+	detectNumbers _ false! !
+
+!TableFieldConverter methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 13:03:11'!
+initialize
+	detectNumbers _ false! !
+
+!TableFieldConverter methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 13:13:45'!
+value: oldValue
+	| newField  | 
+	newField _ oldValue asString.
+	
+	(newField size > 0) ifFalse: [ ^newField ].
+		
+	detectNumbers
+		ifTrue: [ | newNumber |
+			newNumber _ [ newField asNumber ] on: Error do: [ nil ].
+			newNumber isNil ifFalse: [ newField _ newNumber ] ].
+	
+	^newField! !
 
 !TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 10/17/2020 21:41:07'!
 fieldEnd: newFieldEnd
@@ -532,7 +586,7 @@ storeFieldNames
 	fieldNames isNil
 		ifTrue: [ fieldNames _ self storedFields ].! !
 
-!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 10/19/2020 20:40:58'!
+!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:25:17'!
 storeFieldsIn: aCollection 
 	"Returns the currently read fields in the given collection"
 	
@@ -540,14 +594,44 @@ storeFieldsIn: aCollection
 	
 	^aCollection! !
 
-!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 10/19/2020 19:38:12'!
+!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:25:05'!
 storeFieldsIn: aCollection using: aMapping
 	"Returns the currently read fields in the given collection using a mapping collection, which maps an index to something different"
 	
 	(1 to: fieldsIndex) do: [:index| 
 		| keyName |
 		keyName _ aMapping at: index ifAbsent: [ nil ].
-		keyName isNil ifFalse: [		aCollection at: keyName put: (fields at: index) ]].
+		keyName isNil ifFalse: [		aCollection at: keyName put: (fields at: index)]].
+	
+	^aCollection! !
+
+!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:47:29'!
+storeFieldsIn: aCollection using: aMapping converter: usedConverter
+	"Returns the currently read fields in the given collection using a mapping collection, which maps an index to something different and a converter which is applied to each field"
+	
+	(1 to: fieldsIndex) do: [:index| 
+		| keyName newValue |
+		keyName _ aMapping at: index ifAbsent: [ nil ].
+		newValue _ usedConverter value: (fields at: index).
+		
+		keyName isNil ifFalse: [		aCollection at: keyName put: newValue]].
+	
+	^aCollection! !
+
+!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:46:39'!
+storeFieldsIn: aCollection using: aMapping converters: converterCollection
+	"Returns the currently read fields in the given collection using a mapping collection, which maps an index to something different and a collection of converters to apply for each field"
+	| defaultConverter |
+	
+	defaultConverter _ [:value | value asString ].
+	
+	(1 to: fieldsIndex) do: [:index| 
+		| keyName usedConverter newValue |
+		keyName _ aMapping at: index ifAbsent: [ nil ].
+		usedConverter _ converterCollection at: keyName ifAbsent: [ defaultConverter ].
+		newValue _ usedConverter value: (fields at: index).
+		
+		keyName isNil ifFalse: [		aCollection at: keyName put: newValue]].
 	
 	^aCollection! !
 
@@ -556,6 +640,12 @@ storeWithFieldNamesIn: aCollection
 	"Returns the currently read fields in the given collection using a mapping collection, which maps an index to something different"
 	
 	^self storeFieldsIn: aCollection using: fieldNames! !
+
+!TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 12:50:17'!
+storeWithFieldNamesIn: aCollection using: aConverter
+	"Returns the currently read fields in the given collection using a mapping collection, which maps an index to something different"
+	
+	^self storeFieldsIn: aCollection using: fieldNames converter: aConverter! !
 
 !TableFieldsProcessor methodsFor: 'as yet unclassified' stamp: 'jpb 9/19/2020 18:06:02'!
 storedFields
