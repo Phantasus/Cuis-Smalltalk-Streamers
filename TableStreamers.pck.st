@@ -1,120 +1,120 @@
-'From Cuis 5.0 [latest update: #4360] on 21 October 2020 at 7:40:27 pm'!
+'From Cuis 5.0 [latest update: #4526] on 6 April 2021 at 10:42:53 am'!
 'Description Provides different stream based readers for simple tabular data for TSV, CSV or other formats which look similiar to those formats.
 
 Author: Josef Philip Bernhart (jpb)
 License: MIT'!
-!provides: 'TableStreamers' 1 0!
-SystemOrganization addCategory: #'TableStreamers-Tests'!
-SystemOrganization addCategory: #TableStreamers!
+!provides: 'TableStreamers' 1 3!
+SystemOrganization addCategory: 'TableStreamers-Tests'!
+SystemOrganization addCategory: 'TableStreamers'!
 
 
-!classDefinition: #TableCsvReaderTest category: #'TableStreamers-Tests'!
+!classDefinition: #TableCsvReaderTest category: 'TableStreamers-Tests'!
 TestCase subclass: #TableCsvReaderTest
 	instanceVariableNames: 'usedClass'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers-Tests'!
-!classDefinition: 'TableCsvReaderTest class' category: #'TableStreamers-Tests'!
+!classDefinition: 'TableCsvReaderTest class' category: 'TableStreamers-Tests'!
 TableCsvReaderTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableLineReaderTest category: #'TableStreamers-Tests'!
+!classDefinition: #TableLineReaderTest category: 'TableStreamers-Tests'!
 TestCase subclass: #TableLineReaderTest
 	instanceVariableNames: 'usedClass'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers-Tests'!
-!classDefinition: 'TableLineReaderTest class' category: #'TableStreamers-Tests'!
+!classDefinition: 'TableLineReaderTest class' category: 'TableStreamers-Tests'!
 TableLineReaderTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableRecordReaderTest category: #'TableStreamers-Tests'!
+!classDefinition: #TableRecordReaderTest category: 'TableStreamers-Tests'!
 TestCase subclass: #TableRecordReaderTest
 	instanceVariableNames: 'usedClass'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers-Tests'!
-!classDefinition: 'TableRecordReaderTest class' category: #'TableStreamers-Tests'!
+!classDefinition: 'TableRecordReaderTest class' category: 'TableStreamers-Tests'!
 TableRecordReaderTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableArrayRecordBuilder category: #TableStreamers!
+!classDefinition: #TableArrayRecordBuilder category: 'TableStreamers'!
 Object subclass: #TableArrayRecordBuilder
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableArrayRecordBuilder class' category: #TableStreamers!
+!classDefinition: 'TableArrayRecordBuilder class' category: 'TableStreamers'!
 TableArrayRecordBuilder class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableDictionaryRecordBuilder category: #TableStreamers!
+!classDefinition: #TableDictionaryRecordBuilder category: 'TableStreamers'!
 Object subclass: #TableDictionaryRecordBuilder
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableDictionaryRecordBuilder class' category: #TableStreamers!
+!classDefinition: 'TableDictionaryRecordBuilder class' category: 'TableStreamers'!
 TableDictionaryRecordBuilder class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableFieldsProcessor category: #TableStreamers!
+!classDefinition: #TableFieldsProcessor category: 'TableStreamers'!
 Object subclass: #TableFieldsProcessor
 	instanceVariableNames: 'fields field fieldsIndex fieldIndex fieldStart fieldEnd fieldNames insideFieldState'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableFieldsProcessor class' category: #TableStreamers!
+!classDefinition: 'TableFieldsProcessor class' category: 'TableStreamers'!
 TableFieldsProcessor class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableLineProcessor category: #TableStreamers!
+!classDefinition: #TableLineProcessor category: 'TableStreamers'!
 Object subclass: #TableLineProcessor
 	instanceVariableNames: 'lineBuffer lineIndex lineNumber'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableLineProcessor class' category: #TableStreamers!
+!classDefinition: 'TableLineProcessor class' category: 'TableStreamers'!
 TableLineProcessor class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableStreamReader category: #TableStreamers!
+!classDefinition: #TableStreamReader category: 'TableStreamers'!
 Object subclass: #TableStreamReader
 	instanceVariableNames: 'readStream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableStreamReader class' category: #TableStreamers!
+!classDefinition: 'TableStreamReader class' category: 'TableStreamers'!
 TableStreamReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableLineReader category: #TableStreamers!
+!classDefinition: #TableLineReader category: 'TableStreamers'!
 TableStreamReader subclass: #TableLineReader
 	instanceVariableNames: 'crChar lineFeedChar lineBuffer lineIndex lineNumber lineProcessor'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableLineReader class' category: #TableStreamers!
+!classDefinition: 'TableLineReader class' category: 'TableStreamers'!
 TableLineReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #TableRecordReader category: #TableStreamers!
+!classDefinition: #TableRecordReader category: 'TableStreamers'!
 TableStreamReader subclass: #TableRecordReader
 	instanceVariableNames: 'delimiter fieldsProcessor recordBuilder'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'TableRecordReader class' category: #TableStreamers!
+!classDefinition: 'TableRecordReader class' category: 'TableStreamers'!
 TableRecordReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #CsvReader category: #TableStreamers!
+!classDefinition: #CsvReader category: 'TableStreamers'!
 TableRecordReader subclass: #CsvReader
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TableStreamers'!
-!classDefinition: 'CsvReader class' category: #TableStreamers!
+!classDefinition: 'CsvReader class' category: 'TableStreamers'!
 CsvReader class
 	instanceVariableNames: ''!
 
@@ -239,6 +239,21 @@ testReadingUnquotedLines
 	reader _ usedClass on: (self newLines: lines) readStream.
 	self assert: #('name' 'cheese' 'value') equals: reader nextRecord.
 	self assert: #('chedar' 'yes' '13.0') equals: reader nextRecord.! !
+
+!TableCsvReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 4/6/2021 10:42:44'!
+testReadingUpToEnd
+	| reader lines actual |
+	
+	lines _ #(
+		'"name","cheese,beacon,sandwhich","value"'
+		'"chedar","yes","13.0"'
+	).
+	
+	reader _ usedClass on: (self newLines: lines) readStream.
+	actual _ reader upToEnd.
+	
+	self assert: #('name' 'cheese,beacon,sandwhich' 'value') equals: (actual at: 1).
+	self assert: #('chedar' 'yes' '13.0') equals: (actual at: 2).! !
 
 !TableLineReaderTest methodsFor: 'as yet unclassified' stamp: 'jpb 9/19/2020 10:23:39'!
 newCRLFLines: collection
@@ -580,15 +595,29 @@ storeChar: char
 	lineIndex _ lineIndex + 1.
 	lineBuffer at: lineIndex put: char numericValue.! !
 
-!TableStreamReader methodsFor: 'as yet unclassified' stamp: 'jpb 9/19/2020 15:05:37'!
+!TableStreamReader methodsFor: 'enumerating' stamp: 'jpb 4/6/2021 10:21:27'!
+do: aBlock
+	[ self atEnd ]
+		whileFalse: [ aBlock value: self next ]! !
+
+!TableStreamReader methodsFor: 'testing' stamp: 'jpb 9/19/2020 15:05:37'!
 atEnd
 	^readStream atEnd! !
 
-!TableStreamReader methodsFor: 'as yet unclassified' stamp: 'jpb 9/19/2020 11:37:07'!
+!TableStreamReader methodsFor: 'initialization' stamp: 'jpb 9/19/2020 11:37:07'!
 initializeWithStream: newStream
 	self initialize.
 
 	readStream _ newStream.! !
+
+!TableStreamReader methodsFor: 'accessing' stamp: 'jpb 4/6/2021 10:25:57'!
+upToEnd
+	| resultRecords |
+	
+	resultRecords _ OrderedCollection new.
+	self do: [:record | resultRecords add: record ].
+	
+	^resultRecords! !
 
 !TableStreamReader class methodsFor: 'as yet unclassified' stamp: 'jpb 9/19/2020 09:17:00'!
 on: readStream
